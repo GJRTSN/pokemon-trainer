@@ -7,6 +7,11 @@ import { PokemonCataloguePage } from './pages/pokemon-catalogue/pokemon-catalogu
 const routes: Routes = [
   {
     path: "",
+    pathMatch: "full",
+    redirectTo: "/landing"
+  },
+  {
+    path: "landing",
     component: LandingPage
   },
   {
