@@ -1,19 +1,51 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Injectable } from '@angular/core';
+import { Observable, map, of, switchMap } from 'rxjs';
+import { Trainer } from '../models/trainer.model';
+
+/* const {apiUsers, apiKey} = environment; TODO: Add environment keys and variables*/
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  //TODO: Login
+  // modules, http client, observables
+  public login(username: string): Observable<Trainer> {
+    return this.checkUsername(username)
+      .pipe(
+        switchMap((trainer: Trainer | undefined) => {
+          if (trainer === undefined) {
+            return this.createUser(username);
+          }
+          return of(trainer);
+        })
+      )
+  }
 
   //Check if user exists
+  /* private checkUsername(username: string): Observable<Trainer | undefined> {
+    return this.http.get<Trainer[]>('${apiUsers}?username=${username}') //TODO: Add get request 
+      .pipe(
+        map((response: Trainer[]) => response.pop())
+      )
+  } */
 
-  //If NOT user - Create a user
+  //Create user
+  /* private createUser(username: string): Observable<Trainer> { //TODO: Add post request
+    const trainer = {
+      username, 
+      pokemon: []
+    };
 
-  // IF user - store user
+    const headers = new HttpHeaders({
+      "Content-type": "application/json",
+      "x-api-key": apiKey
+    });
 
-  // IF user || Created user -> store user
-}
+    return this.http.post<Trainer>(apiUsers, trainer, {
+      headers
+    });
+  } */
