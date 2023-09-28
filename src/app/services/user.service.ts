@@ -1,26 +1,33 @@
 import { Injectable } from '@angular/core';
-import { Trainer } from '../models/trainer.model';
-import { trainerData } from '../api/trainerData'; // Import the trainerData
+import { Observable, map } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  constructor() {}
+  private apiUrl = environment.apiTrainers;
+  private apiKey = environment.apiKey;
 
-  userExists(username: string): boolean {
-    // Check if a user with the given username already exists
-    return trainerData.some((user) => user.username === username);
+  constructor(private http: HttpClient) {}
+
+  private getHeaders(): HttpHeaders {
+    // Create headers with the API key
+    return new HttpHeaders().set('X-API-Key', this.apiKey);
   }
 
-  addUser(newUser: Trainer): void {
-    // Generate a unique ID for the new user
-    const newUserId = Math.max(...trainerData.map((user) => user.id), 0) + 1;
+  userExists(username: string): Observable<boolean> {
+    // Check if a user with the given username already exists
+    return this.http.get<any[]>(`${this.apiUrl}?username=${username}`, { headers: this.getHeaders() })
+      .pipe(
+        map(users => users.length > 0)
+      );
+  }
 
-    // Assign the new user ID
-    newUser.id = newUserId;
-
-    // Add the new user to the trainerData array
-    trainerData.push(newUser);
+  addUser(username: string): Observable<any> {
+    // Create a new user and add it to the API
+    const newUser = { username, pokemon: [] };
+    return this.http.post<any>(this.apiUrl, newUser, { headers: this.getHeaders() });
   }
 }
