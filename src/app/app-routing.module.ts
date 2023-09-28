@@ -18,11 +18,11 @@ const routes: Routes = [
     path: "trainer",
     component: TrainerPage
   },
-  {
-    path: "pokemon",
+  { 
+    path: 'pokemon', 
     component: PokemonCataloguePage
-  }
-];
+  },
+]
 
 @NgModule({
   imports: [
