@@ -1,32 +1,43 @@
 import { Component } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { Trainer } from 'src/app/models/trainer.model';
-import { LoginService } from 'src/app/services/login.service';
+import { Router } from '@angular/router';
+import { UserService } from '../../services/user.service'; // Import UserService
+import { Trainer } from '../../models/trainer.model'; // Import Trainer model
+import { trainerData } from '../../api/trainerData'; // Import trainerData
 
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.scss']
+  styleUrls: ['./login-form.component.scss'],
 })
 export class LoginFormComponent {
+  username: string = '';
 
-  constructor(/* private readonly loginService: LoginService */) { }
+  constructor(private userService: UserService, private router: Router) {}
 
-  /* public loginSubmit(loginForm: NgForm): void { //TODO: Fix loginSubmit function
+  login(): void {
+    if (this.username.length >= 2) {
+      if (this.userService.userExists(this.username)) {
+        this.router.navigate(['/pokemon']);
+      } else {
+        // Create a new user and add it to trainerData
+        const newUser: Trainer = {
+          id: trainerData.length + 1,
+          username: this.username,
+          pokemon: [],
+        };
+        trainerData.push(newUser); // Add the new user to trainerData
 
-    //username
-    const { username } = loginForm.value;
+        console.log('New User Added:', trainerData); // Log the updated trainerData
 
-    this.loginService.login(username)
-    .subscribe({
-      next: (trainer: Trainer) => {
+        // Save the username in local storage
+        localStorage.setItem('username', this.username);
 
-      },
-      error: () => {
-
+        // Redirect to the catalog page
+        this.router.navigate(['/pokemon']);
       }
-    })
-  } 
-}
- */
+    } else {
+      // Username is too short, display an error or message
+      console.log('Username must be at least 2 characters long');
+    }
+  }
 }

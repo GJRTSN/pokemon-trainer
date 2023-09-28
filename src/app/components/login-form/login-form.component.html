@@ -13,15 +13,18 @@
     <fieldset class="mb-3 w-full">
       <input
         type="text"
-        ngModel
-        #username="ngModel"
-        name="username"
-        id="username"
         class="w-full h-20 border border-slate-300 p-2 rounded-full"
         placeholder="What's your name, trainer?"
+        [(ngModel)]="username"
+        name="username"
       />
     </fieldset>
-
-    <button type="submit" class="bg-green-500 p-2 text-white shadow-2xl rounded-full w-32">Login</button>
+    <button
+      type="button"
+      class="bg-rose-700 p-2 text-white shadow-2xl rounded-full w-32"
+      (click)="login()"
+    >
+      Login
+    </button>
   </form>
 </div>
