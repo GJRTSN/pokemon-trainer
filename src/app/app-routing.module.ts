@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { LandingPage } from './pages/landing/landing.page';
 import { TrainerPage } from './pages/trainer/trainer.page';
 import { PokemonCataloguePage } from './pages/pokemon-catalogue/pokemon-catalogue.page';
+import { authGuard } from '../app/guards/auth.guard'; // Import the AuthGuard
+
 
 const routes: Routes = [
   {
@@ -16,11 +18,13 @@ const routes: Routes = [
   },
   {
     path: "trainer",
-    component: TrainerPage
+    component: TrainerPage,
+    canActivate: [authGuard]
   },
   { 
     path: 'pokemon', 
-    component: PokemonCataloguePage
+    component: PokemonCataloguePage,
+    canActivate: [authGuard]
   },
 ]
 
