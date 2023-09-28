@@ -4,7 +4,7 @@
     <img
       src="/assets/pokemon-logo.png"
       alt="Pokemon Logo"
-      class="w-1/4 mx-auto"
+      class="w-1/5 mx-auto"
     />
   </div>
 
@@ -13,18 +13,39 @@
     <fieldset class="mb-3 w-full">
       <input
         type="text"
-        class="w-full h-20 border border-slate-300 p-2 rounded-full"
+        class="
+          w-full h-20 border border-slate-300 p-2 rounded-full hover:bg-gray-100
+          focus:border-transparent outline-none 
+        "
         placeholder="What's your name, trainer?"
         [(ngModel)]="username"
         name="username"
+        required
       />
+      <div class="flex flex-col items-center">
+        <!-- Display Error Message for Required Validation -->
+        <div
+          *ngIf="showRequiredError"
+          class="text-white mt-2 bg-red-600 w-1/2 rounded-full text-center"
+        >
+          Username is required
+        </div>
+
+        <!-- Display Error Message for Minimum Length Validation -->
+        <div
+          *ngIf="showMinLengthError"
+          class="text-white mt-2 bg-red-600 w-1/2 rounded-full text-center"
+        >
+          Username must be at least 2 characters long
+        </div>
+      </div>
     </fieldset>
     <button
       type="button"
-      class="bg-rose-700 p-2 text-white shadow-2xl rounded-full w-32"
+      class="bg-yellow-400 p-2 text-blue-600 shadow-2xl rounded-full w-32 font-bold hover:bg-yellow-500 hover:text-blue-700"
       (click)="login()"
     >
-      Login
+      Enter
     </button>
   </form>
 </div>
