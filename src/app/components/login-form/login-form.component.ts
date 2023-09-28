@@ -11,33 +11,47 @@ import { trainerData } from '../../api/trainerData'; // Import trainerData
 })
 export class LoginFormComponent {
   username: string = '';
+  showRequiredError: boolean = false;
+  showMinLengthError: boolean = false;
 
   constructor(private userService: UserService, private router: Router) {}
 
   login(): void {
-    if (this.username.length >= 2) {
-      if (this.userService.userExists(this.username)) {
-        this.router.navigate(['/pokemon']);
-      } else {
-        // Create a new user and add it to trainerData
-        const newUser: Trainer = {
-          id: trainerData.length + 1,
-          username: this.username,
-          pokemon: [],
-        };
-        trainerData.push(newUser); // Add the new user to trainerData
+    // Reset error flags
+    this.showRequiredError = false;
+    this.showMinLengthError = false;
 
-        console.log('New User Added:', trainerData); // Log the updated trainerData
-
-        // Save the username in local storage
-        localStorage.setItem('username', this.username);
-
-        // Redirect to the catalog page
-        this.router.navigate(['/pokemon']);
-      }
+    if (this.username.length === 0) {
+      this.showRequiredError = true;
+    } else if (this.username.length < 2) {
+      this.showMinLengthError = true;
     } else {
-      // Username is too short, display an error or message
-      console.log('Username must be at least 2 characters long');
+      if (this.username.length >= 2) {
+        if (this.userService.userExists(this.username)) {
+          this.router.navigate(['/pokemon']);
+        } else {
+          // Create a new user and add it to trainerData
+          const newUser: Trainer = {
+            id: trainerData.length + 1,
+            username: this.username,
+            pokemon: [],
+          };
+          trainerData.push(newUser); // Add the new user to trainerData
+  
+          console.log('New User Added:', trainerData); // Log the updated trainerData
+  
+          // Save the username in local storage
+          localStorage.setItem('username', this.username);
+  
+          // Redirect to the catalog page
+          this.router.navigate(['/pokemon']);
+        }
+      } else {
+        // Username is too short, display an error or message
+        console.log('Username must be at least 2 characters long');
+      }
     }
+
+    
   }
 }
