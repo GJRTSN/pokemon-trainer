@@ -1,28 +1,29 @@
-import { CanActivateFn } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-
-export const authGuard: CanActivateFn = (route, state) => {
-  return true;
-};
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router'; // Import Router
+import { Observable } from 'rxjs';
+import { UserService } from '../services/user.service';
+import { tap, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard {
-  constructor(private router: Router) {}
+export class AuthGuard implements CanActivate {
 
-  canActivate(): boolean {
-    // Check if a Trainer name exists in local or session storage
-    const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+  constructor(private readonly userService: UserService, private readonly router: Router) {} // Inject Router
 
-    if (username) {
-      // Trainer name exists, allow access to the route
-      return true;
-    } else {
-      // No Trainer name found, navigate to the landing page
-      this.router.navigate(['/landing']);
-      return false;
-    }
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    return this.userService.user$.pipe(
+      map((user) => !!user), // Map user data to a boolean indicating authentication
+      tap((authenticated) => {
+        if (!authenticated) {
+          // If not authenticated, navigate to the landing page
+          // You can replace '/landing' with your actual landing page URL
+          this.router.navigate(['/landing']);
+        }
+      })
+    );
   }
 }
