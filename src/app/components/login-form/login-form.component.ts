@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service'; // Import UserService
-import { Trainer } from '../../models/trainer.model'; // Import Trainer model
-import { trainerData } from '../../api/trainerData'; // Import trainerData
 
 @Component({
   selector: 'app-login-form',
@@ -20,38 +18,30 @@ export class LoginFormComponent {
     // Reset error flags
     this.showRequiredError = false;
     this.showMinLengthError = false;
-
+  
     if (this.username.length === 0) {
       this.showRequiredError = true;
     } else if (this.username.length < 2) {
       this.showMinLengthError = true;
     } else {
-      if (this.username.length >= 2) {
-        if (this.userService.userExists(this.username)) {
+      console.log('Checking user existence...');
+      this.userService.userExists(this.username).subscribe((exists) => {
+        console.log('User exists:', exists);
+        if (exists) {
+          console.log('Navigating to /pokemon...');
           this.router.navigate(['/pokemon']);
         } else {
-          // Create a new user and add it to trainerData
-          const newUser: Trainer = {
-            id: trainerData.length + 1,
-            username: this.username,
-            pokemon: [],
-          };
-          trainerData.push(newUser); // Add the new user to trainerData
-  
-          console.log('New User Added:', trainerData); // Log the updated trainerData
-  
-          // Save the username in local storage
-          localStorage.setItem('username', this.username);
-  
-          // Redirect to the catalog page
-          this.router.navigate(['/pokemon']);
+          console.log('Adding user and navigating to /pokemon...');
+          this.userService.addUser(this.username).subscribe(() => {
+            // Save the username in local storage
+            localStorage.setItem('username', this.username);
+          
+            // Redirect to the catalog page
+            this.router.navigate(['/pokemon']);
+          });
         }
-      } else {
-        // Username is too short, display an error or message
-        console.log('Username must be at least 2 characters long');
-      }
+      });
     }
-
-    
   }
+  
 }
