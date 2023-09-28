@@ -1,0 +1,38 @@
+<!-- navigation.component.html -->
+<nav class="bg-blue-500 p-4">
+  <ul class="flex space-x-4 justify-center">
+    <li>
+      <a
+        [ngClass]="{ 'text-white': !rla.isActive }"
+        class="px-4 py-2 rounded"
+        #rla="routerLinkActive"
+        routerLink="/"
+        routerLinkActive="bg-white text-blue-500"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Login</a
+      >
+    </li>
+    <li>
+      <a
+        [ngClass]="{ 'text-white': !rla1.isActive }"
+        class="px-4 py-2 rounded"
+        #rla1="routerLinkActive"
+        routerLink="/pokemon"
+        routerLinkActive="bg-white text-blue-500"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Pokemon Catalogue</a
+      >
+    </li>
+    <li>
+      <a
+        [ngClass]="{ 'text-white': !rla2.isActive }"
+        class="px-4 py-2 rounded"
+        #rla2="routerLinkActive"
+        routerLink="/trainer"
+        routerLinkActive="bg-white text-blue-500"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Trainer</a
+      >
+    </li>
+  </ul>
+</nav>
