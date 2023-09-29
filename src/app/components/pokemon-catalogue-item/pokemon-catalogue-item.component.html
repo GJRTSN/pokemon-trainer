@@ -9,8 +9,14 @@
   <p class="text-xl font-mono text-indigo-500">{{ pokemon.name }}</p>
   <button
     (click)="onCollect()"
-    class="mt-2 bg-yellow-500 text-white px-4 py-1 rounded-full hover:bg-yellow-600 focus:ring focus:ring-yellow-200 focus:ring-opacity-50 transition-transform transform hover:scale-110 ease-in-out duration-300"
+    [ngClass]="collected ? 'bg-green-500' : 'bg-yellow-500'"
+    class="mt-2 text-white px-4 py-1 rounded-full hover:bg-yellow-600 focus:ring focus:ring-yellow-200 focus:ring-opacity-50 transition-transform transform hover:scale-110 ease-in-out duration-300"
   >
-    Collect
+    <ng-container *ngIf="!collected; else collectedTemplate">
+      Collect
+    </ng-container>
+    <ng-template #collectedTemplate>
+      <p>Success!</p>
+    </ng-template>
   </button>
 </div>

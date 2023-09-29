@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class TrainerPage implements OnInit {
   trainerName: string = '';
-  collectedPokemon: any[] = []; // Initialize as an empty array
+  collectedPokemon: any[] = [];
 
   constructor(
     private router: Router,
@@ -21,32 +21,30 @@ export class TrainerPage implements OnInit {
   ngOnInit() {
     const storedTrainerName = localStorage.getItem('username');
     if (storedTrainerName) {
-      // If the trainer's name is found in local storage, assign it to trainerName
+      // If trainer's name is found in local storage, assign to trainerName
       this.trainerName = storedTrainerName;
     } else {
-      // If the trainer's name is not found in local storage, redirect to the landing page
+      // If trainer's name is not found in local storage, redirect to landing page
       this.router.navigate(['/landing']);
     }
 
-    // Fetch the user's collected Pokémon data from the service
+    // Fetch user's collected Pokémon data from service
     this.userService.user$.subscribe((user) => {
       console.log('User Data:', user); // Log user data
       if (user && user.pokemon && user.pokemon.length > 0) {
-        // Fetch Pokémon details, including images
+        // Fetch Pokémon details and images
         const pokemonDetailsPromises = user.pokemon.map((pokemonName) => {
           return this.http
             .get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
             .toPromise();
         });
 
-        // Wait for all Pokémon details to be fetched
         Promise.all(pokemonDetailsPromises)
           .then((pokemonDetails) => {
-            // Map the details to your collectedPokemon array
             this.collectedPokemon = pokemonDetails.map((pokemon: any) => {
               return {
                 name: pokemon.name,
-                imageUrl: pokemon.sprites.front_default, // Get the image URL
+                imageUrl: pokemon.sprites.front_default, // Get image URL
               };
             });
           })
@@ -54,17 +52,15 @@ export class TrainerPage implements OnInit {
             console.error('Error fetching Pokémon details:', error);
           });
       } else {
-        // Handle the case when user data or Pokémon list is empty
         console.warn('User data or Pokémon list is empty.');
       }
     });
   }
 
   removePokemon(pokemon: any): void {
-    // Call the removePokemon method from the UserService to remove the Pokémon
     this.userService.removePokemon(pokemon.name).subscribe(
       () => {
-        // Remove the Pokémon from the local array as well
+        // Remove the Pokémon from the local array
         this.collectedPokemon = this.collectedPokemon.filter(
           (p) => p.name !== pokemon.name
         );

@@ -9,8 +9,13 @@ import { Pokemon } from 'src/app/models/pokemon.model';
 export class PokemonCatalogueItemComponent {
   @Input() pokemon!: Pokemon;
   @Output() collect = new EventEmitter<Pokemon>();
+  collected = false;
 
   onCollect() {
-    this.collect.emit(this.pokemon);
+    this.collected = true;
+    setTimeout(() => {
+      this.collect.emit(this.pokemon);
+      this.collected = false;
+    }, 2000);
   }
 }

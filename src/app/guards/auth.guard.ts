@@ -5,7 +5,7 @@ import {
   Router,
   RouterStateSnapshot,
   UrlTree,
-} from '@angular/router'; // Import Router
+} from '@angular/router';
 import { Observable } from 'rxjs';
 import { UserService } from '../services/user.service';
 import { tap, map } from 'rxjs/operators';
@@ -17,7 +17,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private readonly userService: UserService,
     private readonly router: Router
-  ) {} // Inject Router
+  ) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -28,11 +28,10 @@ export class AuthGuard implements CanActivate {
     | boolean
     | UrlTree {
     return this.userService.user$.pipe(
-      map((user) => !!user), // Map user data to a boolean indicating authentication
+      map((user) => !!user),
       tap((authenticated) => {
         if (!authenticated) {
           // If not authenticated, navigate to the landing page
-          // You can replace '/landing' with your actual landing page URL
           this.router.navigate(['/landing']);
         }
       })

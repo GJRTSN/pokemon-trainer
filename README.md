@@ -5,13 +5,17 @@
 <br>
 
 ## Introduction
+
 TBA
 
 ## Figma
+
 TBA
 
 ## Content
+
 TBA
 
 ## Demo
+
 The project is available for testing here: <a href="https://js-a3-pokemontrainer.vercel.app/">Live demo</a>
