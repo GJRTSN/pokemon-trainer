@@ -16,5 +16,4 @@ export class LandingPage implements OnInit {
       this.router.navigate(['/pokemon']); // Redirect to Pokémon Catalogue if Trainer name exists
     }
   }
-}
-y;
+};
