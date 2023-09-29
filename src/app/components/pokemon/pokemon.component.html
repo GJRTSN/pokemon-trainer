@@ -1,0 +1,23 @@
+<div
+  class="border-2 border-indigo-200 p-4 rounded-xl bg-white shadow-lg transition-transform transform hover:scale-105 flex flex-col items-center"
+>
+  <img
+    [src]="pokemon.imageUrl"
+    alt="{{ pokemon.name }}"
+    class="w-full object-cover mb-2 rounded-lg"
+  />
+
+  <div
+    class="bg-blue-500 w-full p-2 rounded-lg flex items-center justify-between"
+  >
+    <p class="text-2xl font-medium text-white">
+      {{ pokemon.name }}
+    </p>
+    <button
+      (click)="onRemove()"
+      class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-orange-300 focus:ring ease-in-out focus:ring-red-200 focus:ring-opacity-50"
+    >
+      Remove
+    </button>
+  </div>
+</div>
