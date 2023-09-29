@@ -15,11 +15,12 @@ export class LoginFormComponent {
 
   constructor(private userService: UserService, private router: Router) {}
 
+  // Inside LoginFormComponent
   login(): void {
     // Reset error flags
     this.showRequiredError = false;
     this.showMinLengthError = false;
-
+  
     if (this.username.length === 0) {
       this.showRequiredError = true;
     } else if (this.username.length < 2) {
@@ -30,17 +31,26 @@ export class LoginFormComponent {
         console.log('User exists:', exists);
         if (exists) {
           console.log('Logging in existing user...');
-          // Get the user data and update it
-          const user: User = { id: 0, username: this.username, pokemon: [] };
-          this.userService.updateUser(user);
-          console.log('Navigating to /pokemon...');
-          this.router.navigate(['/pokemon']);
+          // Fetch the user's data, including their ID
+          this.userService.getUserByUsername(this.username).subscribe((user) => {
+            // Update user data in your service or state management solution
+            this.userService.updateUser(user);
+  
+            // Set the username in local storage
+            localStorage.setItem('username', this.username);
+  
+            console.log('Navigating to /pokemon...');
+            this.router.navigate(['/pokemon']);
+          });
         } else {
           console.log('Adding user and navigating to /pokemon...');
-          this.userService.addUser(this.username).subscribe(() => {
-            // Save the username in local storage
+          this.userService.addUser(this.username).subscribe((user) => {
+            // Update user data in your service or state management solution
+            this.userService.updateUser(user);
+  
+            // Set the username in local storage
             localStorage.setItem('username', this.username);
-
+  
             // Redirect to the catalog page
             this.router.navigate(['/pokemon']);
           });
@@ -48,4 +58,5 @@ export class LoginFormComponent {
       });
     }
   }
+
 }
