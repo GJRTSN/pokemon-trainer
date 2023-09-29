@@ -7,17 +7,22 @@ import { PokemonCataloguePage } from './pages/pokemon-catalogue/pokemon-catalogu
 const routes: Routes = [
   {
     path: "",
+    pathMatch: "full",
+    redirectTo: "/landing"
+  },
+  {
+    path: "landing",
     component: LandingPage
   },
   {
     path: "trainer",
     component: TrainerPage
   },
-  {
-    path: "pokemon",
+  { 
+    path: 'pokemon', 
     component: PokemonCataloguePage
-  }
-];
+  },
+]
 
 @NgModule({
   imports: [

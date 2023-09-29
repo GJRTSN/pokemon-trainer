@@ -9,6 +9,11 @@ import { PokemonCataloguePage } from './pages/pokemon-catalogue/pokemon-catalogu
 import { PokemonComponent } from './components/pokemon/pokemon.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { PokemonCatalogueItemComponent } from './components/pokemon-catalogue-item/pokemon-catalogue-item.component';
+import { LoginFormComponent } from './components/login-form/login-form.component';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { UserService } from './services/user.service';
 
 @NgModule({
   declarations: [
@@ -19,9 +24,16 @@ import { PokemonCatalogueItemComponent } from './components/pokemon-catalogue-it
     PokemonComponent,
     NavigationComponent,
     PokemonCatalogueItemComponent,
+    LoginFormComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule],
-  providers: [],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    FormsModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+  ],
+  providers: [UserService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
