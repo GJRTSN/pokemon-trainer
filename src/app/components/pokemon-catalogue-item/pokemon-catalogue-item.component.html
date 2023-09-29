@@ -1,0 +1,16 @@
+<div
+  class="bg-white border-2 border-indigo-200 rounded-lg shadow-lg p-2 transition-transform transform hover:scale-105 flex flex-col items-center justify-center"
+>
+  <img
+    [src]="pokemon.imageUrl"
+    alt="{{ pokemon.name }}"
+    class="w-full object-contain mb-2 h-32"
+  />
+  <p class="text-xl font-mono text-indigo-500">{{ pokemon.name }}</p>
+  <button
+    (click)="onCollect()"
+    class="mt-2 bg-yellow-500 text-white px-4 py-1 rounded-full hover:bg-yellow-600 focus:ring focus:ring-yellow-200 focus:ring-opacity-50 transition-transform transform hover:scale-110 ease-in-out duration-300"
+  >
+    Collect
+  </button>
+</div>
