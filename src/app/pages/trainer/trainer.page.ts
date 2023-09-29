@@ -34,7 +34,9 @@ export class TrainerPage implements OnInit {
       if (user && user.pokemon && user.pokemon.length > 0) {
         // Fetch Pokémon details, including images
         const pokemonDetailsPromises = user.pokemon.map((pokemonName) => {
-          return this.http.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`).toPromise();
+          return this.http
+            .get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
+            .toPromise();
         });
 
         // Wait for all Pokémon details to be fetched
@@ -63,14 +65,16 @@ export class TrainerPage implements OnInit {
     this.userService.removePokemon(pokemon.name).subscribe(
       () => {
         // Remove the Pokémon from the local array as well
-        this.collectedPokemon = this.collectedPokemon.filter((p) => p.name !== pokemon.name);
+        this.collectedPokemon = this.collectedPokemon.filter(
+          (p) => p.name !== pokemon.name
+        );
         console.log('Pokémon removed successfully.');
       },
       (error) => {
         console.error('Error removing Pokémon:', error);
       }
     );
-  }  
+  }
 
   logout(): void {
     sessionStorage.removeItem('username');

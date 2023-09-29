@@ -22,21 +22,21 @@ export class PokemonCataloguePage implements OnInit {
         this.allPokemon = response.results.map((pokemon: any) => ({
           id: this.getPokemonIdFromUrl(pokemon.url),
           name: pokemon.name,
-          imageUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${this.getPokemonIdFromUrl(pokemon.url)}.png`,
+          imageUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${this.getPokemonIdFromUrl(
+            pokemon.url
+          )}.png`,
         }));
-  
+
         // Store the data in sessionStorage
         sessionStorage.setItem('pokemonData', JSON.stringify(this.allPokemon));
       });
   }
-  
 
-// Helper function to extract the Pokemon ID from the URL
-getPokemonIdFromUrl(url: string): number {
-  const parts = url.split('/');
-  return parseInt(parts[parts.length - 2], 10);
-}
-
+  // Helper function to extract the Pokemon ID from the URL
+  getPokemonIdFromUrl(url: string): number {
+    const parts = url.split('/');
+    return parseInt(parts[parts.length - 2], 10);
+  }
 
   collectPokemon(pokemon: Pokemon) {
     this.userService.collectPokemon(pokemon).subscribe(
@@ -50,4 +50,4 @@ getPokemonIdFromUrl(url: string): number {
       }
     );
   }
-}  
+}

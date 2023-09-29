@@ -11,7 +11,7 @@ import { Pokemon } from '../models/pokemon.model';
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrlTrainers= environment.apiTrainers;
+  private apiUrlTrainers = environment.apiTrainers;
   private apiUrlPokemon = environment.apiPokemon;
 
   // Use BehaviorSubject to store and provide the user data
@@ -37,38 +37,38 @@ export class UserService {
   addUser(username: string): Observable<User> {
     // Create a new user with an initial 'id' of 0
     const newUser: User = { id: 0, username, pokemon: [] };
-    
+
     return this.http
       .post<any>(this.apiUrlTrainers, newUser, { headers: this.getHeaders() })
       .pipe(
         mergeMap((response) => {
           // The response should contain the newly created user's data with a valid ID
           const createdUser: User = response;
-  
+
           // Update user data in the BehaviorSubject after a successful login
           this.userSubject.next(createdUser);
-  
+
           // Return the created user data
           return of(createdUser);
         })
       );
   }
-  
-  
+
   getUserByUsername(username: string): Observable<User> {
-    return this.http.get<User[]>(`${this.apiUrlTrainers}?username=${username}`, {
-      headers: this.getHeaders(),
-    }).pipe(
-      map((users) => {
-        if (users.length > 0) {
-          return users[0]; // Assuming usernames are unique; you can add error handling if needed
-        } else {
-          throw new Error('User not found'); // Handle this error appropriately
-        }
+    return this.http
+      .get<User[]>(`${this.apiUrlTrainers}?username=${username}`, {
+        headers: this.getHeaders(),
       })
-    );
+      .pipe(
+        map((users) => {
+          if (users.length > 0) {
+            return users[0]; // Assuming usernames are unique; you can add error handling if needed
+          } else {
+            throw new Error('User not found'); // Handle this error appropriately
+          }
+        })
+      );
   }
-  
 
   updateUser(user: User | null) {
     this.userSubject.next(user);
@@ -77,7 +77,7 @@ export class UserService {
   collectPokemon(pokemon: Pokemon): Observable<void> {
     // Get the current user
     const currentUser = this.userSubject.value;
-  
+
     // Ensure the user exists and has a valid 'pokemon' property
     if (!currentUser || !Array.isArray(currentUser.pokemon)) {
       console.error('Invalid user data.');
@@ -85,26 +85,30 @@ export class UserService {
         observer.complete(); // Immediately complete the observable
       });
     }
-  
+
     // Add the collected Pokémon to the user's array
     currentUser.pokemon.push(pokemon.name);
-  
+
     // Use the correct user ID in the URL for the PUT request
     const userId = currentUser.id;
-  
+
     // Update the user data in the BehaviorSubject
     this.userSubject.next(currentUser);
-  
+
     // Send a PUT request to update the user's Pokémon collection on the API
-    return this.http.put<void>(`${this.apiUrlTrainers}/${userId}`, currentUser, {
-      headers: this.getHeaders(),
-    });
+    return this.http.put<void>(
+      `${this.apiUrlTrainers}/${userId}`,
+      currentUser,
+      {
+        headers: this.getHeaders(),
+      }
+    );
   }
-  
+
   removePokemon(pokemonName: string): Observable<void> {
     // Get the current user
     const currentUser = this.userSubject.value;
-  
+
     // Ensure the user exists and has a valid 'pokemon' property
     if (!currentUser || !Array.isArray(currentUser.pokemon)) {
       console.error('Invalid user data.');
@@ -112,19 +116,23 @@ export class UserService {
         observer.complete(); // Immediately complete the observable
       });
     }
-  
+
     // Remove the specified Pokémon from the user's array
     currentUser.pokemon = currentUser.pokemon.filter((p) => p !== pokemonName);
-  
+
     // Use the correct user ID in the URL for the PUT request
     const userId = currentUser.id;
-  
+
     // Update the user data in the BehaviorSubject
     this.userSubject.next(currentUser);
-  
+
     // Send a PUT request to update the user's Pokémon collection on the API
-    return this.http.put<void>(`${this.apiUrlTrainers}/${userId}`, currentUser, {
-      headers: this.getHeaders(),
-    });
-  }  
+    return this.http.put<void>(
+      `${this.apiUrlTrainers}/${userId}`,
+      currentUser,
+      {
+        headers: this.getHeaders(),
+      }
+    );
+  }
 }
